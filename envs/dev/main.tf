@@ -29,9 +29,6 @@ module "ecs" {
   private_subnet_ids = module.network.private_subnet_ids
   public_subnet_ids  = module.network.public_subnet_ids
   log_group_name     = module.logging.app_log_group_name
-
-  db_endpoint = module.rds.endpoint
-  db_name     = module.rds.db_name
 }
 
 module "waf" {
