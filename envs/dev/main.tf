@@ -18,6 +18,7 @@ module "rds" {
   vpc_id             = module.network.vpc_id
   private_subnet_ids = module.network.private_subnet_ids
   app_sg_id          = module.ecs.app_sg_id
+  db_password        = var.db_password
 }
 
 module "ecs" {
