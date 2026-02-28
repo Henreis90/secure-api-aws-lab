@@ -40,7 +40,7 @@ variable "allocated_storage" {
 
 variable "engine_version" {
   type    = string
-  default = "16.2"
+  default = "18.1"
 }
 
 variable "backup_retention_days" {
