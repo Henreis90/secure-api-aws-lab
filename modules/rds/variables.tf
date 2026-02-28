@@ -57,3 +57,8 @@ variable "skip_final_snapshot" {
   type    = bool
   default = true
 }
+
+variable "parameter_group_family" {
+  type    = string
+  default = "postgres17"
+}
