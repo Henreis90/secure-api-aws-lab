@@ -16,12 +16,19 @@ resource "aws_wafv2_web_acl" "this" {
     allow {}
   }
 
-  # AWS Managed - Common protections
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "${local.name}-waf"
+    sampled_requests_enabled   = true
+  }
+
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
 
-    override_action { none {} }
+    override_action {
+      none {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -37,12 +44,13 @@ resource "aws_wafv2_web_acl" "this" {
     }
   }
 
-  # Rate limiting (basic anti-abuse)
   rule {
     name     = "RateLimit"
     priority = 20
 
-    action { block {} }
+    action {
+      block {}
+    }
 
     statement {
       rate_based_statement {
@@ -56,12 +64,6 @@ resource "aws_wafv2_web_acl" "this" {
       metric_name                = "RateLimit"
       sampled_requests_enabled   = true
     }
-  }
-
-  visibility_config {
-    cloudwatch_metrics_enabled = true
-    metric_name                = "${local.name}-waf"
-    sampled_requests_enabled   = true
   }
 
   tags = local.common_tags
