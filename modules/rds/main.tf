@@ -52,8 +52,8 @@ resource "aws_db_subnet_group" "this" {
 #########################################
 
 resource "aws_db_parameter_group" "this" {
-  name   = "${local.name}-pg16"
-  family = "postgres16"
+  name   = "${local.name}-pg"
+  family = var.parameter_group_family
 
   # Lightweight logging for lab visibility
   parameter {
