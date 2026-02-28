@@ -19,7 +19,7 @@ module "rds" {
   private_subnet_ids = module.network.private_subnet_ids
   app_sg_id          = module.ecs.app_sg_id
   db_password        = var.db_password
-  engine_version        = "17.1"
+  engine_version        = "17.2"
   parameter_group_family = "postgres17"
 }
 
