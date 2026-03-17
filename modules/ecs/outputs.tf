@@ -27,3 +27,7 @@ output "app_sg_id" {
   description = "Security group ID for ECS tasks"
   value       = aws_security_group.app.id
 }
+
+output "alb_zone_id" {
+  value = aws_lb.this.zone_id
+}
