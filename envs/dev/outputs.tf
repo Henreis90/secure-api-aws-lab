@@ -73,3 +73,8 @@ output "cloudwatch_log_group" {
   description = "Application CloudWatch log group"
   value       = module.logging.app_log_group_name
 }
+
+#########################################
+# ECR - Repo de Imagem
+#########################################
+container_image = "${module.ecr.repository_url}:latest"
