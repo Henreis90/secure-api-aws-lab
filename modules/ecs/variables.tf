@@ -43,10 +43,6 @@ variable "certificate_arn" {
   type = string
 }
 
-variable "container_image" {
-  type = string
-}
-
 variable "db_host" {
   type = string
 }
