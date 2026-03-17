@@ -31,6 +31,7 @@ module "ecs" {
   private_subnet_ids = module.network.private_subnet_ids
   public_subnet_ids  = module.network.public_subnet_ids
   log_group_name     = module.logging.app_log_group_name
+  certificate_arn = aws_acm_certificate_validation.api.certificate_arn
 }
 
 module "waf" {
@@ -69,14 +70,6 @@ resource "aws_route53_record" "cert_validation" {
 resource "aws_acm_certificate_validation" "api" {
   certificate_arn         = aws_acm_certificate.api.arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
-}
-
-module "ecs" {
-  source = "../../modules/ecs"
-
-  # ... suas configs
-
-  certificate_arn = aws_acm_certificate_validation.api.certificate_arn
 }
 
 resource "aws_route53_record" "api" {
