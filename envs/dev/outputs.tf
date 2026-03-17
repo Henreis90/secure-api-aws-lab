@@ -77,4 +77,4 @@ output "cloudwatch_log_group" {
 #########################################
 # ECR - Repo de Imagem
 #########################################
-container_image = "${module.ecr.repository_url}:latest"
+#container_image = "${module.ecr.repository_url}:latest"
