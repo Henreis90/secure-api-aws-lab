@@ -34,6 +34,11 @@ module "ecs" {
   certificate_arn = aws_acm_certificate_validation.api.certificate_arn
 }
 
+module "ecr" {
+  source = "../../modules/ecr"
+  name = "secure-api-python"
+}
+
 module "waf" {
   source      = "../../modules/waf"
   project     = var.project
