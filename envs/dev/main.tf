@@ -70,3 +70,23 @@ resource "aws_acm_certificate_validation" "api" {
   certificate_arn         = aws_acm_certificate.api.arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
+
+module "ecs" {
+  source = "../../modules/ecs"
+
+  # ... suas configs
+
+  certificate_arn = aws_acm_certificate_validation.api.certificate_arn
+}
+
+resource "aws_route53_record" "api" {
+  zone_id = var.route53_zone_id
+  name    = var.api_domain_name
+  type    = "A"
+
+  alias {
+    name                   = module.ecs.alb_dns_name
+    zone_id                = module.ecs.alb_zone_id
+    evaluate_target_health = true
+  }
+}
