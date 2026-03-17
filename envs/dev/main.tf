@@ -32,7 +32,14 @@ module "ecs" {
   public_subnet_ids  = module.network.public_subnet_ids
   log_group_name     = module.logging.app_log_group_name
   certificate_arn = aws_acm_certificate_validation.api.certificate_arn
-}
+  container_image = "441819341895.dkr.ecr.us-east-1.amazonaws.com/secure-api-python:latest"
+  container_port  = 8080
+  db_host     = module.rds.address
+  db_port     = 5432
+  db_name     = module.rds.db_name
+  db_user     = "appuser"
+  db_password = var.db_password
+  }
 
 module "ecr" {
   source = "../../modules/ecr"
