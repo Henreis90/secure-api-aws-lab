@@ -11,7 +11,3 @@ variable "api_domain_name" {
 variable "route53_zone_id" {
   default = "Z07365072A02CW8J97LV3"
 }
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
