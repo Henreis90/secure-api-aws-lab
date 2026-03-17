@@ -88,15 +88,15 @@ resource "aws_lb_target_group" "this" {
   vpc_id      = var.vpc_id
   target_type = "ip"
 
-  health_check {
-    enabled             = true
-    path                = "/"
-    matcher             = "200-399"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-  }
+health_check {
+  enabled             = true
+  path                = "/health"
+  matcher             = "200-399"
+  interval            = 30
+  timeout             = 5
+  healthy_threshold   = 2
+  unhealthy_threshold = 2
+}
 
   tags = merge(local.common_tags, { Name = "${local.name}-tg" })
 }
@@ -192,30 +192,35 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn        = aws_iam_role.execution.arn
   task_role_arn             = aws_iam_role.task.arn
 
-  container_definitions = jsonencode([
-    {
-      name      = "nginx"
-      image     = var.container_image
-      essential = true
-      portMappings = [
-        {
-          containerPort = var.container_port
-          protocol      = "tcp"
-        }
-      ]
-      environment = [
-        { name = "ENV", value = var.env }
-      ]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = var.log_group_name
-          awslogs-region        = "us-east-1"
-          awslogs-stream-prefix = "ecs"
-        }
+container_definitions = jsonencode([
+  {
+    name      = "api"
+    image     = var.container_image
+    essential = true
+    portMappings = [
+      {
+        containerPort = var.container_port
+        protocol      = "tcp"
+      }
+    ]
+    environment = [
+      { name = "ENV", value = var.env },
+      { name = "DB_HOST", value = var.db_host },
+      { name = "DB_PORT", value = tostring(var.db_port) },
+      { name = "DB_NAME", value = var.db_name },
+      { name = "DB_USER", value = var.db_user },
+      { name = "DB_PASSWORD", value = var.db_password }
+    ]
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        awslogs-group         = var.log_group_name
+        awslogs-region        = "us-east-1"
+        awslogs-stream-prefix = "ecs"
       }
     }
-  ])
+  }
+])
 
   tags = merge(local.common_tags, { Name = "${local.name}-taskdef" })
 }
@@ -239,7 +244,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = "nginx"
+    container_name   = "api"
     container_port   = var.container_port
   }
 
