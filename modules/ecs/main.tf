@@ -82,7 +82,7 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = replace("${local.name}-tg", "/[^a-zA-Z0-9-]/", "-")
+  name_prefix = replace("${local.name}-tg", "/[^a-zA-Z0-9-]/", "-")
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -98,6 +98,9 @@ health_check {
   unhealthy_threshold = 2
 }
 
+  lifecycle {
+    create_before_destroy = true
+  }
   tags = merge(local.common_tags, { Name = "${local.name}-tg" })
 }
 
