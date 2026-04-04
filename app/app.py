@@ -177,7 +177,9 @@ def create_jwt(user):
 
 
 def decode_jwt(token):
-    return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+#    return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+#UNSAFE:
+    return jwt.decode(token, options={"verify_signature": False})
 
 
 def get_bearer_token():
@@ -392,6 +394,9 @@ def login_session():
         return json_error("Invalid credentials", 401)
 
     session_id = secrets.token_urlsafe(32)
+# UNSAFE:  
+# session_id = request.cookies.get("session_id") or secrets.token_urlsafe(32)
+
     expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
 
     SESSIONS[session_id] = {
