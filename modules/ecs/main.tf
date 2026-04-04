@@ -212,8 +212,9 @@ container_definitions = jsonencode([
       { name = "DB_PORT", value = tostring(var.db_port) },
       { name = "DB_NAME", value = var.db_name },
       { name = "DB_USER", value = var.db_user },
-      { name = "DB_PASSWORD", value = var.db_password }
-    ]
+      { name = "DB_PASSWORD", value = var.db_password },
+      { name = "JWT_SECRET", value = var.jwt_secret }    
+      ]
     logConfiguration = {
       logDriver = "awslogs"
       options = {

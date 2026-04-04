@@ -39,6 +39,7 @@ module "ecs" {
   db_name     = module.rds.db_name
   db_user     = "appuser"
   db_password = var.db_password
+  jwt_secret = var.jwt_secret
   }
 
 module "ecr" {
