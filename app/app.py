@@ -817,9 +817,10 @@ def method_not_allowed(_error):
 def internal_error(_error):
     return json_error("Internal server error", 500)
 
+ensure_notes_table_exists()
+ensure_users_table_exists()
+seed_default_users()
 
 if __name__ == "__main__":
-    ensure_notes_table_exists()
-    ensure_users_table_exists()
-    seed_default_users()
+
     app.run(host="0.0.0.0", port=8080)
